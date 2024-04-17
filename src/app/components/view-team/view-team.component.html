@@ -1,0 +1,113 @@
+<ng-container>
+  <div class="row text-center" style="background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallpapertag.com%2Fwallpaper%2Ffull%2Fb%2F6%2Ff%2F151424-top-power-point-backgrounds-1920x1200.jpg&f=1&nofb=1&ipt=b7e0dc0d00ef3e801bc7f6275a4d5cb58be0163b659aaf3ddc8016839b8b7d3d&ipo=images'); ">
+    <div class="row">
+      <div class="col-3">
+      </div>
+      <div class="col-6">
+        <img src="{{selectedTeam?.badge}}" alt="teamBadge" onerror="this.src='./assets/homeEmblem.png';" width="128px" height="128px">
+      </div>
+      <div class="col-3">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">
+      </div>
+      <div class="col-6" style="font-size: 32px; color: whitesmoke">
+        {{selectedTeam?.name}}
+      </div>
+      <div class="col-3">
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="this.tokenDecoder.isAdmin()" class="row mt-4" [formGroup]="newPlayerForm">
+    <div class="row">
+      <div class="col-4"></div>
+      <div class="col-2">
+        <label for="firstName" class="form-label">First name</label>
+        <input class="form-control" id="firstName" [formControlName]="'firstName'" placeholder="Player's first name">
+      </div>
+      <div class="col-2">
+        <label for="lastName" class="form-label">Last name</label>
+        <input class="form-control" id="lastName" [formControlName]="'lastName'" placeholder="Player's last name">
+      </div>
+      <div class="col-4"></div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4"></div>
+      <div class="col-1">
+        <label for="jerseyNo" class="form-label">Jersey #</label>
+        <input class="form-control" id="jerseyNo" type="number" min="0" max="99" [formControlName]="'jerseyNo'" placeholder="No.">
+      </div>
+      <div class="col-1">
+        <label for="position" class="form-label">Position</label>
+        <select class="form-control" id="position" [formControlName]="'position'" placeholder="Pos">
+          <option value="" selected disabled hidden>Pos</option>
+          <option value="0">PG</option>
+          <option value="1">SG</option>
+          <option value="2">SF</option>
+          <option value="3">PF</option>
+          <option value="4">C</option>
+        </select>
+      </div>
+      <div class="col-1 center-flexbox">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" [formControlName]="'starter'">
+        <label class="form-check-label ms-1" for="flexCheckDefault">
+          Starter
+        </label>
+      </div>
+      <div class="col-1" style="position: relative">
+        <button class="btn btn-success bottom" (click)="createPlayer()" [disabled]="!newPlayerForm.valid">Create player</button>
+      </div>
+      <div class="col-4"></div>
+    </div>
+  </div>
+
+    <div class="row text-center mt-4 mb-4">
+      <div class="col-6">
+        <div *ngFor="let player of players$ | async; index as i">
+          <div class="row" *ngIf="i % 2 == 0">
+            <div class="col-4">
+
+            </div>
+            <div class="col-8" >
+                <app-player (removePlayer)="removePlayer($event)" (substitutePlayer)="substitutePlayer($event)"
+                            [playerId]="player.id"
+                            [firstName]="player.firstName"
+                            [lastName]="player.lastName"
+                            [jerseyNo]="player.jerseyNo"
+                            [position]="player.position"
+                            [starter]="player.starter"
+                            [players]="getAllSubs()"
+                            [left]="true"
+                ></app-player>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div *ngFor="let player of players$ | async; index as i">
+          <div class="row" *ngIf="i % 2 != 0">
+            <div class="col-8" >
+              <app-player (removePlayer)="removePlayer($event)" (substitutePlayer)="substitutePlayer($event)"
+                          [playerId]="player.id"
+                          [firstName]="player.firstName"
+                          [lastName]="player.lastName"
+                          [jerseyNo]="player.jerseyNo"
+                          [position]="player.position"
+                          [starter]="player.starter"
+                          [players]="getAllSubs()"
+                          [left]="true"
+              ></app-player>
+            </div>
+            <div class="col-4">
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+</ng-container>

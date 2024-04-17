@@ -1,0 +1,45 @@
+<ng-container>
+  <div class="scrolling-wrapper" role="group">
+    <div *ngFor="let game of games; index as i" style="margin-right: 20px; margin-left: 20px">
+      <div class="row center border border-primary bg-white">
+        <div class="col-4 center-flexbox">
+          <div class="col-4">
+            <img src="{{game.homeTeam.badge}}" alt="Home Team Badge" onerror="this.src='./assets/homeEmblem.png';" width="84px" height="84px"/>
+          </div>
+          <div class="col-8 team-name">
+            {{game.homeTeam.name}}
+          </div>
+        </div>
+        <div class="col-4 mt-3">
+          <div class="points-background letters">
+            <div class="row">
+              <div class="col-6">
+                PERIOD:
+              </div>
+              <div class="col-6 points">
+                {{game.currentQuarter}}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-6">
+                SCORE:
+              </div>
+              <div class="col-6 points">
+                  {{game.currentScore}}
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary mb-2" (click)="watchMatch('match', game.gameId)">Watch</button>
+        </div>
+        <div class="col-4 center-flexbox">
+          <div class="col-8 team-name">
+            {{game.awayTeam.name}}
+          </div>
+          <img src="{{game.awayTeam.badge}}" alt="Away Team Badge" onerror="this.src='./assets/awayEmblem.png';" width="84px" height="84px"/>
+        </div>
+      </div>
+      <br *ngIf="i < games.length - 1">
+    </div>
+  </div>
+</ng-container>

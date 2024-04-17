@@ -1,1 +1,42 @@
 /* You can add global styles to this file, and also import other style files */
+
+.scrolling-wrapper {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  white-space: nowrap;
+  height: 700px;
+}
+
+.padding {
+  padding-top: 8px;
+}
+
+.team-name {
+  font-family: 'Red Hat Display', sans-serif;
+  font-size: 28px;
+}
+
+.team-name-teams {
+  font-family: 'Red Hat Display', sans-serif;
+  font-size: 18px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+

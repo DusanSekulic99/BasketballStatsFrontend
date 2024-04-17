@@ -1,0 +1,98 @@
+<ng-container >
+  <div class="border border-primary bg-white mb-3">
+  <div class="row text-center mt-2">
+    <div class="col-1" (click)="setClicked(false)">
+
+    </div>
+    <div class="col-2 jersey-no" (click)="setClicked(false)">
+      {{ jerseyNo }}
+    </div>
+    <div class="col-4 player-name" (click)="setClicked(false)">
+      <div class="text-center">
+        {{ firstName }}
+      </div>
+      <div class="text-center">
+        {{ lastName }}
+      </div>
+    </div>
+    <div class="col-1">
+
+    </div>
+    <div class="col-2 jersey-no" (click)="setClicked(false)">
+      {{ position }}
+    </div>
+    <div class="dropdown col-1 mt-2" *ngIf="this.tokenDecoder.isAdmin() && (starter || playing)" (click)="setClicked(true)" >
+      <button class="btn btn-sm btn-outline-dark dropdown-toggle" (click)="setClicked(true)" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+      </button>
+      <ul class="dropdown-menu">
+        <li *ngFor="let player of players; index as i" class="text-center dropdown-item">
+          <button class="btn" (click)="emitSubstitutePlayer(player.id)">
+            {{player.jerseyNo + " | " + player.firstName + " " + player.lastName + " | " + player.position}}
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div *ngIf="isMatchRoute() else removeOption">
+    <div class="row text-center mt-2 mb-1 ms-1 me-1 stats">
+      <div class="col-3 text-center">
+        <div>
+          {{points}}
+        </div>
+        <div>
+          PTS
+        </div>
+      </div>
+      <div class="col-3">
+        <div>
+          {{assists}}
+        </div>
+        <div>
+          AST
+        </div>
+      </div>
+      <div class="col-3">
+        <div>
+          {{rebounds}}
+        </div>
+        <div>
+          REB
+        </div>
+      </div>
+      <div class="col-3">
+        <div>
+          {{fouls}}
+        </div>
+        <div>
+          FOUL
+        </div>
+      </div>
+    </div>
+    <div *ngIf="this.tokenDecoder.isAdmin()" class="row text-center mt-2 mb-1 ms-1 me-1">
+      <div class="col-2">
+        <button class="btn btn-sm btn-outline-primary" (click)="emitAddPoints(1)">+1P</button>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-sm btn-outline-primary" (click)="emitAddPoints(2)">+2P</button>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-sm btn-outline-primary" (click)="emitAddPoints(3)">+3P</button>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-sm btn-outline-primary" (click)="emitAddAssist()">AST</button>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-sm btn-outline-primary" (click)="emitAddRebound()">REB</button>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-sm btn-outline-primary" (click)="emitAddFoul()">FOUL</button>
+      </div>
+    </div>
+  </div>
+  <ng-template #removeOption>
+    <div class="row text-center"  *ngIf="this.tokenDecoder.isAdmin() && clicked">
+      <button class="btn btn-outline-danger" (click)="emitRemovePlayer()">Remove</button>
+    </div>
+  </ng-template>
+  </div>
+</ng-container>

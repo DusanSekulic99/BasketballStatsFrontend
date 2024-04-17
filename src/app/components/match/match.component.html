@@ -1,0 +1,148 @@
+<ng-container>
+  <div class="border border-primary bg-white padding">
+    <div class="row text-center" *ngIf="game$ | async as game">
+      <div class="col-2"></div>
+      <div class="col-2">
+        <img src="{{game.homeTeam.badge}}" alt="Home Team Badge" onerror="this.src='./assets/homeEmblem.png';" width="128px" height="128px"/>
+      </div>
+      <div class="col-1 center-flexbox team-name">
+        {{game.homeTeam.name}}
+      </div>
+      <div class="col-2 text-center mt-4 game-stats">
+          <div class="row mt-lg-2">
+            <div class="col-12">
+            {{game.currentScore}}
+            </div>
+          </div>
+          <div class="row mt-lg-4">
+            <div class="col-2">
+            </div>
+            <div class="col-4">
+              Q{{game.currentQuarter}}
+            </div>
+            <div class="col-4">
+              {{calculateGameTime(game.playingTimeLeft)}}
+            </div>
+            <div class="col-2">
+            </div>
+          </div>
+          <div class="row mt-1 text-center game-stats">
+            <div *ngIf="game.status !== 'PLAYING'" class="col-12">
+              {{game.status}}
+            </div>
+            <div *ngIf="this.tokenDecoder.isAdmin() && validateGame(game)" class="col-12" style="color: red; font-size: 18px">
+              Player with 5 fouls must be substituted.
+            </div>
+            <div *ngIf="game.status === 'DONE'" class="col-12">
+              <button class="btn btn-outline-primary" (click)="getReport(game.gameId)">Report</button>
+            </div>
+          </div>
+      </div>
+      <div class="col-1 center-flexbox team-name">
+        {{game.awayTeam.name}}
+      </div>
+      <div class="col-2">
+        <img src="{{game.awayTeam.badge}}" alt="Away Team Badge" onerror="this.src='./assets/homeEmblem.png';" width="128px" height="128px"/>
+      </div>
+      <div class="col-2"></div>
+  </div>
+  <div *ngIf="game$ | async as game" class="row text-center">
+
+  </div>
+  <div class="row mt-2 mb-2 text-center" *ngIf="game$ | async as game">
+    <div class="col-2"></div>
+    <div class="col-2 game-stats">
+      <div>
+        TO: {{game.homeTeamTimeout}}
+      </div>
+      <div>
+        <button *ngIf="this.tokenDecoder.isAdmin()" class="btn btn-outline-secondary" [disabled]="game.homeTeamTimeout <= 0" (click)="callTimeout(game.playingTimeLeft, game.gameId, game.homeTeam.id)">Timeout</button>
+      </div>
+      <div>
+        <button class="btn btn-sm me-1" [class]="game.homeTeamBonus >= 1 ? 'btn-danger' : 'btn-warning'"> </button>
+        <button class="btn btn-sm me-1" [class]="game.homeTeamBonus >= 2 ? 'btn-danger' : 'btn-warning'"> </button>
+        <button class="btn btn-sm me-1" [class]="game.homeTeamBonus >= 3 ? 'btn-danger' : 'btn-warning'"> </button>
+        <button class="btn btn-sm me-1" [class]="game.homeTeamBonus >= 4 ? 'btn-danger' : 'btn-warning'"> </button>
+        <button class="btn btn-sm me-1" [class]="game.homeTeamBonus >= 5 ? 'btn-danger' : 'btn-warning'"> </button>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="mb-1">
+        <button *ngIf="this.tokenDecoder.isAdmin() && !gameClockInterval" [disabled]="validateGame(game)" class="btn btn-success" (click)="startCountdown(game.playingTimeLeft, game.gameId)">Start</button>
+        <button *ngIf="this.tokenDecoder.isAdmin() && gameClockInterval" class="btn btn-outline-danger" (click)="stopCountDown(game.playingTimeLeft, game.gameId)">Stop</button>
+      </div>
+      <div class="mt-1">
+        <button *ngIf="this.tokenDecoder.isAdmin()" class="btn btn-danger" [disabled]="game.playingTimeLeft != 0" (click)="endQuarter(game.gameId)">End</button>
+      </div>
+    </div>
+    <div class="col-2 game-stats">
+      <div>
+        TO: {{game.awayTeamTimeout}}
+      </div>
+      <div>
+        <button *ngIf="this.tokenDecoder.isAdmin()" class="btn btn-outline-secondary" [disabled]="game.awayTeamTimeout <= 0" (click)="callTimeout(game.playingTimeLeft, game.gameId, game.awayTeam.id)">Timeout</button>
+      </div>
+      <div>
+        <button class="btn btn-sm me-1" [class]="game.awayTeamBonus >= 1 ? 'btn-danger' : 'btn-warning'"> </button>
+        <button class="btn btn-sm me-1" [class]="game.awayTeamBonus >= 2 ? 'btn-danger' : 'btn-warning'"> </button>
+        <button class="btn btn-sm me-1" [class]="game.awayTeamBonus >= 3 ? 'btn-danger' : 'btn-warning'"> </button>
+        <button class="btn btn-sm me-1" [class]="game.awayTeamBonus >= 4 ? 'btn-danger' : 'btn-warning'"> </button>
+        <button class="btn btn-sm me-1" [class]="game.awayTeamBonus >= 5 ? 'btn-danger' : 'btn-warning'"> </button>
+      </div>
+    </div>
+    <div class="col-2"></div>
+  </div>
+  </div>
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-4">
+      <div class="mt-2" *ngFor="let player of (homeTeamPlayers$ | async); index as i">
+        <app-player *ngIf="player.playing"
+                    [playerId]="player.id"
+                    [firstName]="player.firstName"
+                    [lastName]="player.lastName"
+                    [jerseyNo]="player.jerseyNo"
+                    [position]="player.position"
+                    [starter]="player.starter"
+                    [playing]="player.playing"
+                    [points]="player.points"
+                    [assists]="player.assists"
+                    [rebounds]="player.rebounds"
+                    [left]="true"
+                    [fouls]="player.fouls"
+                    [players]="getAllSubs(homeTeamPlayers$ | async)"
+                    (addPoints)="addPoints($event)"
+                    (addRebound)="addRebound($event)"
+                    (addAssist)="addAssist($event)"
+                    (addFoul)="addFoul($event)"
+                    (substitutePlayer)="substitutePlayerInGame($event)"
+        ></app-player>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="mt-2" *ngFor="let player of (awayTeamPlayers$ | async); index as i">
+        <app-player *ngIf="player.playing"
+                    [firstName]="player.firstName"
+                    [playerId]="player.id"
+                    [lastName]="player.lastName"
+                    [jerseyNo]="player.jerseyNo"
+                    [position]="player.position"
+                    [starter]="player.starter"
+                    [playing]="player.playing"
+                    [players]="getAllSubs(awayTeamPlayers$ | async)"
+                    [points]="player.points"
+                    [assists]="player.assists"
+                    [rebounds]="player.rebounds"
+                    [fouls]="player.fouls"
+                    (addPoints)="addPoints($event)"
+                    (addRebound)="addRebound($event)"
+                    (addAssist)="addAssist($event)"
+                    (addFoul)="addFoul($event)"
+                    (substitutePlayer)="substitutePlayerInGame($event)"
+        >
+        </app-player>
+      </div>
+    </div>
+    <div class="col-2"></div>
+  </div>
+</ng-container>

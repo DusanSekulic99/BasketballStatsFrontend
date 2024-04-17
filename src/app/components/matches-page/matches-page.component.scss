@@ -1,0 +1,53 @@
+@font-face {
+  font-family: 'Digital Display';
+  src: url('https://praxeds.github.io/scrimba-basketball-scoreboard/Assets/Digital-Display.woff2') format('woff2'),
+  url('https://praxeds.github.io/basketball-scoreboard/Assets/Digital-Display.woff2') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.points {
+  font-family: 'Black Ops One', sans-serif;
+  font-size: 47px;
+  color: yellow;
+}
+
+.letters {
+  font-family: 'Black Ops One', sans-serif;
+  font-size: 47px;
+  color: yellow;
+}
+
+
+.points-background {
+  background-color: black;
+  margin-bottom: 10px;
+}
+
+.center-flexbox {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+.center-flexbox-left {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  padding: 12px 0;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+.center {
+  text-align: center;
+}

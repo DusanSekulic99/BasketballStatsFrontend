@@ -107,5 +107,13 @@
       }
     }
   },
-  "defaultProject": "basketball-stats-frontend"
+  "defaultProject": "basketball-stats-frontend",
+  "cli": {
+    "schematicCollections": [
+      "@ngrx/schematics",
+      "@ngrx/schematics",
+      "@ngrx/schematics"
+    ],
+    "defaultCollection": "@ngrx/schematics"
+  }
 }

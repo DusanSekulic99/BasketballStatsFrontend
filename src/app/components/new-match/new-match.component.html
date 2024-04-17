@@ -1,0 +1,97 @@
+<ng-container>
+  <div class="row text-center">
+    <div class="col-2">
+
+    </div>
+    <div class="col-3">
+        <button class="btn btn-outline-primary btn-lg dropdown-toggle bg-white text-black" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="{{selectedHomeTeamSubject.getValue().badge}}" alt="Home Team Badge" onerror="this.src='./assets/homeEmblem.png';" width="64px" height="64px"/>
+          {{selectedHomeTeamSubject.getValue().name}}
+        </button>
+        <ul class="dropdown-menu">
+          <li *ngFor="let team of teams$ | async; index as i">
+            <button class="btn" (click)="selectHomeTeam(team)">
+              <img src="{{team.badge}}" alt="Home Team Badge" onerror="this.src='./assets/homeEmblem.png';" width="64px" height="64px"/>
+              {{team.name}}
+            </button>
+          </li>
+        </ul>
+    </div>
+    <div class="col-2 vs">
+        VS
+    </div>
+    <div class="col-3">
+        <button class="btn btn-outline-primary btn-lg dropdown-toggle bg-white text-black" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="{{selectedAwayTeamSubject.getValue().badge}}" alt="Home Team Badge" onerror="this.src='./assets/homeEmblem.png';" width="64px" height="64px"/>
+          {{selectedAwayTeamSubject.getValue().name}}
+        </button>
+        <ul class="dropdown-menu">
+          <li *ngFor="let team of teams$ | async; index as i">
+            <button class="btn" (click)="selectAwayTeam(team)">
+            <img src="{{team.badge}}" alt="Home Team Badge" onerror="this.src='./assets/homeEmblem.png';" width="64px" height="64px"/>
+            {{team.name}}
+          </button>
+          </li>
+
+        </ul>
+      </div>
+    <div class="col-2">
+
+    </div>
+  </div>
+
+  <div class="row mt-4 text-center">
+    <div class="col-1">
+
+    </div>
+    <div class="col-4">
+      <app-player *ngFor="let player of homePlayers$ | async; index as i"
+                  (substitutePlayer)="substituteHomePlayer($event)"
+                  [playerId]="player.id"
+                  [firstName]="player.firstName"
+                  [lastName]="player.lastName"
+                  [jerseyNo]="player.jerseyNo"
+                  [position]="player.position"
+                  [starter]="player.starter"
+                  [players]="homeSubs"
+                  [left]="true">
+
+      </app-player>
+    </div>
+    <div class="col-2" [formGroup]="newGameForm">
+      <label for="position" class="form-label quarter">Quarter time:</label>
+      <select class="form-control text-center" id="position" [formControlName]="'minutes'">
+        <option value="5">5</option>
+        <option value="8">8</option>
+        <option value="10">10</option>
+        <option value="12">12</option>
+      </select>
+    </div>
+    <div class="col-4">
+      <app-player *ngFor="let player of awayPlayers$ | async; index as i"
+                  (substitutePlayer)="substituteAwayPlayer($event)"
+                  [playerId]="player.id"
+                  [firstName]="player.firstName"
+                  [lastName]="player.lastName"
+                  [jerseyNo]="player.jerseyNo"
+                  [position]="player.position"
+                  [starter]="player.starter"
+                  [players]="awaySubs">
+
+      </app-player>
+    </div>
+    <div class="col-1">
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-5">
+    </div>
+    <div class="col-2 text-center">
+      <button class="btn btn-success" (click)="createAndStartGame()">Start game</button>
+    </div>
+    <div class="col-5">
+    </div>
+  </div>
+</ng-container>
